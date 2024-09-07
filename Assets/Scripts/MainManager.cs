@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -18,7 +19,9 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
-    
+    // My code:
+    public Text bestScoreText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -60,6 +63,10 @@ public class MainManager : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
+
+        // My code:
+        ScoreText.text = "Score: " + DataManager.Instance.currentName + " " + m_Points;
+        bestScoreText.text = "Best Score: " + DataManager.Instance.highScoreName + " " + DataManager.Instance.highScore;
     }
 
     void AddPoint(int point)
@@ -72,5 +79,22 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+        SetHighScore();
+
+    }
+
+    public void GoBack()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    // My code:
+    private void SetHighScore()
+    {
+        if (m_Points > DataManager.Instance.highScore)
+        {
+            DataManager.Instance.highScore = m_Points;
+            DataManager.Instance.highScoreName = DataManager.Instance.currentName;
+        }
     }
 }
